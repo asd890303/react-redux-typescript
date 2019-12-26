@@ -1,0 +1,95 @@
+/* Layout */
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+body,
+html {
+  height: 100%;
+}
+
+.App-header {
+  width: 100%;
+  height: 60px;
+  font-size: 20px;
+  color: white;
+  text-align: center;
+  position: absolute;
+  top: 0;
+  z-index: 10;
+  /* background: rgba(0, 0, 0, 0); */
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* body */
+body {
+  margin: auto;
+  max-width: 768px;
+  min-width: 0;
+  height: 100%;
+  width: 100%;
+  background-color: #f2f2f2;
+  position: relative;
+  top: 0px;
+  bottom: 0px;
+}
+
+body::after {
+  content: "";
+  display: block;
+  /* height: 100px; */
+}
+
+.App-content {
+  overflow: hidden;
+  min-height: 100%;
+  padding: 0;
+  margin: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+/* footer */
+.App-footer {
+  flex-direction: row;
+  display: flex;
+  background-color: #282c34;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 60px;
+  font-size: 24px;
+  color: white;
+  text-align: center;
+  margin-top: auto;
+  z-index: 10;
+}
+
+.footer-cell {
+  align-items: center;
+  color: white;
+  display: grid;
+  flex: 1;
+  font-size: 12px;
+  justify-content: center;
+  margin: 5px;
+}
+
+.footer-cell img {
+  width: 32px;
+  height: 32px;
+}
+
+.add-image img {
+  width: 50px;
+  height: 50px;
+}
