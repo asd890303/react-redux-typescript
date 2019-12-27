@@ -1,6 +1,6 @@
 const Host = {
     prod: '',
-    localhost: 'http://localhost:8050'
+    localhost: 'http://localhost'
 }
 
 export const serviceConfig = {
@@ -11,27 +11,13 @@ export const serviceConfig = {
             rules: [
                 'getVideoList',
                 'getComments',
-                'getReplys',
-                'setVideo',
-                'setComment',
-                'addView',
-                'addLike',
-                'addStep',
-                'addShare',
-                'setBlack',
-                'addCommentLike',
-                'getAttentionVideo',
-                'getVideo',
-                'getMyVideo'
             ]
         },
         {
             moudle: 'Login',
             rules: [
                 'userLogin',
-                'userLoginByThird',
                 'getLoginCode',
-                'userReg'
             ]
         }
     ]

@@ -1,13 +1,15 @@
+/* swiper */
 .swiper-container {
   width: 100%;
   height: 100%;
-  background-color: black;
+  background-color: var(--main-background-color);
 }
 
 .swiper-slide {
   text-align: center;
   font-size: 18px;
-  background-color: black;
+  background-color: var(--main-background-color);
+
   /* Center slide text vertically */
   display: -webkit-box;
   display: -ms-flexbox;
@@ -25,35 +27,77 @@
 
 .swiper-slide-video-thumb {
   z-index: 9;
-  max-width: 100%;
-  /* max-height: 100%; */
+  width: 100%;
+  max-height: 100%;
 }
 
 .swiper-slide-video {
   z-index: 9;
   width: 100%;
-  height: 100%;
+  max-height: 100%;
 }
 
 .swiper-slide-content {
   color: white;
   overflow: hidden;
-  padding-left: 20px;
-  font-size: 16px;
-  padding-top: 60vh;
+  bottom: 40px;
+  left: 20px;
+  font-size: 14px;
   position: absolute;
   text-align: left;
   text-overflow: ellipsis;
   white-space: nowrap;
-  width: 95%;
+  width: 90%;
   z-index: 10;
 }
 
+.swiper-slide-func {
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  bottom: 0;
+  height: 60%;
+  max-width: 120px;
+  position: absolute;
+  right: 0;
+  width: 20%;
+  z-index: 10;
+}
+
+.swiper-slide-func img {
+  max-height: 45px;
+  max-width: 45px;
+}
+
+.swiper-slide-func-content {
+  font-size: 16px;
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.func-content-user {
+  display: grid;
+  justify-items: center;
+}
+
+.func-content-user img:last-child {
+  width: 25px;
+  height: 25px;
+  position: relative;
+  bottom: 15px;
+}
 .home-header {
   align-items: baseline;
   display: flex;
   justify-content: space-between;
   padding: 20px 25%;
+  z-index: 10;
+}
+
+.home-header div {
+  width: 120px;
 }
 
 .home-header .selected {

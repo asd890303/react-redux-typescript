@@ -1,4 +1,5 @@
 import "../../styles/home.css";
+import "../../styles/swiper/swiper.min.css";
 
 import * as React from "react";
 
@@ -12,10 +13,6 @@ interface HomeProps {
 }
 interface HomeState {}
 export default class Home extends React.Component<HomeProps, HomeState> {
-  constructor(props: HomeProps) {
-    super(props);
-  }
-
   state = {
     divHeight: 0
   };
@@ -28,7 +25,7 @@ export default class Home extends React.Component<HomeProps, HomeState> {
   }
 
   getHomePage = () => {
-    switch (this.props.currentHomeSubMenu | 0) {
+    switch (this.props.currentHomeSubMenu) {
       case HomeSubMenu.Recommend:
         return <Recommend />;
       case HomeSubMenu.Hot:
@@ -47,7 +44,7 @@ export default class Home extends React.Component<HomeProps, HomeState> {
     return (
       <div
         className="swiper-container"
-        style={{ height: this.state.divHeight + "px", top: "60px" }}
+        style={{ height: this.state.divHeight + "px" }}
       >
         {this.getHomePage()}
       </div>

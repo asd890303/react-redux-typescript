@@ -19,6 +19,6 @@ export default class Nearby extends React.Component<NearbyProps, NearbyState> {
   };
 
   public render() {
-    return <div className="swiper-container">Nearby</div>;
+    return <div className="swiper-wrapper">Nearby</div>;
   }
 }

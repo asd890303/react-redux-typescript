@@ -52,6 +52,7 @@ class App extends React.Component<AppProps> {
 
   public render() {
     const { currentMenu, currentHomeSubMenu } = this.props.app;
+    console.log("render app");
     return (
       <div className="App">
         <Header

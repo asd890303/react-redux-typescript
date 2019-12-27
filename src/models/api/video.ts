@@ -1,34 +1,46 @@
+import MusicInfoModel from './musicInfo';
 import UserInfoModel from './userInfo';
 
 export default interface VideoModel {
-    id: string
-    uid: string
-    title: string
-    thumb: string
-    thumb_s: string
-    href: string
-    likes: string
-    views: string
-    comments: string
-    steps: string
-    shares: string
-    addtime: string
-    lat: string
-    lng: string
-    city: string
-    isdel: string
-    status: string
-    music_id: string
-    xiajia_reason: string
-    show_val: string
-    nopass_time: string
-    watch_ok: string
-    is_ad: string
     ad_endtime: string
     ad_url: string
+    addtime: string
+    author: string
+    city: string
+    comments: string
+    datetime: string
+    file_url: string
+    href: string
+    id: string
+    img_url: string
+    is_ad: string
+    isattent: string
+    isdel: string
+    islike: string
+    isstep: string
+    lat: string
+    length: string
+    likes: string
+    lng: string
+    music_format: string
+    music_id: string
+    musicinfo: MusicInfoModel
+    nopass_time: string
     orderno: string
-    reward: string
-    rebacktype: string
     reback_content: string
+    rebacktype: string
+    reward: string
+    shares: string
+    show_val: string
+    status: string
+    steps: string
+    thumb_s: string
+    thumb: string
+    title: string
+    uid: string
+    use_nums: string
     userinfo: UserInfoModel
+    views: string
+    watch_ok: string
+    xiajia_reason: string
 }

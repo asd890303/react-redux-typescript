@@ -15,7 +15,7 @@ export default class Header extends React.Component<HeaderProps> {
   };
 
   initHeader = () => {
-    const subMenu = ["推荐", "热门", "附近"];
+    const subMenu = ["推薦", "熱門", "附近"];
     switch (this.props.currentMenu) {
       case MainMenu.Home:
         return (

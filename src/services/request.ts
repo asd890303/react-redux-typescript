@@ -5,7 +5,7 @@ import { serviceConfig } from './service.config';
 const defaultOptions: AxiosRequestConfig = {
     method: 'get',
     // headers: { 'test': 'test' },
-    timeout: 10000,
+    timeout: 3000,
     responseType: 'json',
     params: {},
     data: {}

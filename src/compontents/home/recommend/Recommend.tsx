@@ -2,7 +2,7 @@ import * as React from "react";
 
 import Request from "../../../services/request";
 import Swiper from "swiper";
-import Video from "../../base/Video";
+import VideoCell from "../../base/VideoCell";
 import VideoModel from "../../../models/api/video";
 
 interface RecommendProps {}
@@ -26,17 +26,16 @@ export default class Recommend extends React.Component<
   };
 
   getVideoList = () => {
+    //getVideoList getRecommendVideos ?
     Request.get("Video", "getVideoList", {}, (response: any) => {
       console.log(response);
       if (response && response.data) {
-        this.initHomePage(response.data.info);
-      } else {
-        console.log("no data");
+        this.initRecommendPage(response.data.info);
       }
     });
   };
 
-  initHomePage = (data: VideoModel[]) => {
+  initRecommendPage = (data: VideoModel[]) => {
     if (data.length > 0) {
       this.setState({
         videoList: data
@@ -45,15 +44,15 @@ export default class Recommend extends React.Component<
       let swiper = new Swiper(".swiper-container", {
         direction: "vertical",
         preloadImages: false,
-        lazy: true,
+        lazy: { loadPrevNextAmount: 4, loadPrevNext: true },
         observer: true,
         observeParents: true
       });
 
-      swiper.on("resize", () => {});
-      window.addEventListener("resize", () => {
-        swiper.update();
-      });
+      // swiper.on("resize", () => {});
+      // window.addEventListener("resize", () => {
+      //   swiper.update();
+      // });
 
       swiper.on("touchStart", () => {
         let video: any = document.getElementsByClassName(
@@ -95,6 +94,10 @@ export default class Recommend extends React.Component<
         }
         if (thumb && thumb.length > 0) thumb[0].hidden = true;
       });
+
+      // to do reload data
+      swiper.on("reachBeginning", () => {});
+      swiper.on("reachEnd", () => {});
     }
 
     setTimeout(() => {
@@ -116,7 +119,13 @@ export default class Recommend extends React.Component<
       <div className="swiper-wrapper">
         {this.state.videoList.map((video, index) => {
           return (
-            <Video vid={index} key={"swiper-slide-video-" + index} {...video} />
+            <VideoCell
+              fontSize={18}
+              hasFuncSlide={true}
+              key={"swiper-slide-video-" + index}
+              vid={index}
+              {...video}
+            />
           );
         })}
       </div>
