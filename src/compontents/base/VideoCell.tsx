@@ -1,25 +1,46 @@
 import * as React from "react";
 
+import { NavLink } from "react-router-dom";
 import VideoCellFunc from "./VideoCellFunc";
 import VideoModel from "../../models/api/video";
 
 interface VideoCellProps extends VideoModel {
-  hasVideo?: boolean;
-  hasFuncSlide?: boolean;
+  autoplay?: boolean;
   className?: string;
-  height?: number;
+  enableClick?: boolean;
   fontSize?: number;
+  hasFuncSlide?: boolean;
+  hasVideo?: boolean;
+  height?: number;
+  hiddenThumb?: boolean;
+  index: number;
   width?: number;
-  vid: number;
   onClick?: Function;
 }
+
 export default class VideoCell extends React.Component<VideoCellProps> {
   public static defaultProps = {
+    autoplay: false,
     hasVideo: true,
+    hiddenThumb: false,
     hasFuncSlide: true
   };
 
-  componentDidMount = () => {};
+  private player?: any;
+
+  componentDidMount = () => {
+    this.player = document.getElementById(
+      "swiper-slide-video-thumb-" + this.props.index
+    );
+  };
+
+  componentWillUnmount() {
+    if (this.player) {
+      this.player.pause();
+      this.player.removeAttribute("src");
+      delete this.player;
+    }
+  }
 
   handleClick = () => {
     this.props.onClick && this.props.onClick();
@@ -98,6 +119,7 @@ export default class VideoCell extends React.Component<VideoCellProps> {
   public render() {
     const {
       className,
+      enableClick,
       fontSize,
       hasVideo,
       height,
@@ -122,23 +144,31 @@ export default class VideoCell extends React.Component<VideoCellProps> {
         onClick={this.handleClick}
         style={{ width: divWidth, height: divHeight }}
       >
+        {enableClick && (
+          <NavLink
+            className="video-nav-link"
+            to={`/video/` + this.props.id}
+          ></NavLink>
+        )}
         <img
+          hidden={this.props.hiddenThumb}
           className={
             "swiper-lazy swiper-slide-video-thumb swiper-slide-video-thumb-" +
-            this.props.vid
+            this.props.index
           }
           alt={title}
-          // src={process.env.PUBLIC_URL + "/images/common/nodata.png"}
+          src={process.env.PUBLIC_URL + "/images/common/video-loading.gif"}
           //  data-srcset="path/logo/logo-large.png 2x"
           data-src={thumb}
         ></img>
         {hasVideo && (
           <video
+            autoPlay={this.props.autoplay}
             className={
-              "swiper-slide-video swiper-slide-video-" + this.props.vid
+              "swiper-slide-video swiper-slide-video-" + this.props.index
             }
             loop
-            hidden
+            hidden={!this.props.autoplay}
           >
             <source src={href} type="video/mp4"></source>
           </video>
@@ -149,7 +179,7 @@ export default class VideoCell extends React.Component<VideoCellProps> {
           {title}
         </div>
         {this.renderFuncView()}
-        <div className="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
+        {/* <div className="swiper-lazy-preloader swiper-lazy-preloader-white" /> */}
       </div>
     );
   }

@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import Request from "../../../services/request";
+import Request from "../../../lib/services/request";
 import Swiper from "swiper";
 import VideoCell from "../../base/VideoCell";
 import VideoModel from "../../../models/api/video";
@@ -20,110 +20,143 @@ export default class Recommend extends React.Component<
       videoList: []
     };
   }
+  swiper: any = null;
 
   componentDidMount = () => {
+    this.initRecommendPage();
     this.getVideoList();
+  };
+
+  componentWillUnmount = () => {
+    if (this.swiper) {
+      this.swiper.destroy();
+      this.swiper = null;
+    }
+  };
+
+  componentDidUpdate = () => {
+    if (this.swiper) {
+      this.swiper.update();
+    }
   };
 
   getVideoList = () => {
     //getVideoList getRecommendVideos ?
-    Request.get("Video", "getVideoList", {}, (response: any) => {
+    let req = new Request();
+    req.get("Video", "getVideoList", { p: "1" }, (response: any) => {
       console.log(response);
       if (response && response.data) {
-        this.initRecommendPage(response.data.info);
+        let data: VideoModel[] = response.data.info;
+        this.setState({
+          videoList: data
+        });
+
+        if (this.swiper) {
+          let thumb: any = document.getElementsByClassName(
+            "swiper-slide-video-thumb-0"
+          );
+          if (thumb && thumb.length > 0) thumb[0].hidden = true;
+          this.swiper.update();
+        }
       }
     });
   };
 
-  initRecommendPage = (data: VideoModel[]) => {
-    if (data.length > 0) {
-      this.setState({
-        videoList: data
-      });
+  initRecommendPage = () => {
+    let swiper = new Swiper(".swiper-container", {
+      direction: "vertical",
+      lazy: {
+        loadPrevNextAmount: 4,
+        loadPrevNext: true,
+        loadOnTransitionStart: true
+      },
+      observeParents: true,
+      observer: true,
+      preloadImages: false,
+      watchSlidesVisibility: true
+    });
 
-      let swiper = new Swiper(".swiper-container", {
-        direction: "vertical",
-        preloadImages: false,
-        lazy: { loadPrevNextAmount: 4, loadPrevNext: true },
-        observer: true,
-        observeParents: true
-      });
-
-      // swiper.on("resize", () => {});
-      // window.addEventListener("resize", () => {
-      //   swiper.update();
-      // });
-
-      swiper.on("touchStart", () => {
-        let video: any = document.getElementsByClassName(
-          "swiper-slide-video-" + swiper.activeIndex
-        )[0];
-
-        if (video && video.length > 0) {
-          video.pause();
-        }
-      });
-
-      swiper.on("slideChangeTransitionStart", () => {
-        let video: any = document.getElementsByClassName(
-          "swiper-slide-video-" + swiper.activeIndex
-        );
-        let thumb: any = document.getElementsByClassName(
-          "swiper-slide-video-thumb-" + swiper.activeIndex
-        );
-
-        if (video && video.length > 0) {
-          video[0].hidden = true;
-          video[0].pause();
-          video[0].currentTime = 0;
-        }
-        if (thumb && thumb.length > 0) thumb[0].hidden = false;
-      });
-
-      swiper.on("slideChangeTransitionEnd", () => {
-        let video: any = document.getElementsByClassName(
-          "swiper-slide-video-" + swiper.activeIndex
-        );
-        let thumb: any = document.getElementsByClassName(
-          "swiper-slide-video-thumb-" + swiper.activeIndex
-        );
-
-        if (video && video.length > 0) {
-          video[0].hidden = false;
-          video[0].play();
-        }
-        if (thumb && thumb.length > 0) thumb[0].hidden = true;
-      });
-
-      // to do reload data
-      swiper.on("reachBeginning", () => {});
-      swiper.on("reachEnd", () => {});
-    }
-
-    setTimeout(() => {
-      let thumb: any = document.getElementsByClassName(
-        "swiper-slide-video-thumb-0"
+    function stopAllVideo() {
+      let vids: HTMLCollectionOf<HTMLVideoElement> = document.getElementsByTagName(
+        "video"
       );
 
-      let video: any = document.getElementsByClassName("swiper-slide-video-0");
-
-      if (video && video.length > 0) {
-        video[0].hidden = false;
-        video[0].play();
+      for (var i = 0; i < vids.length; i++) {
+        vids[i].pause();
+        vids[i].currentTime = 0;
       }
-      if (thumb && thumb.length > 0) thumb[0].hidden = true;
-    }, 1500);
+    }
+
+    function playCurrentVideo(id: number) {
+      let vids: any = document.getElementsByClassName(
+        "swiper-slide-video-" + id
+      );
+      let thumbs: any = document.getElementsByClassName(
+        "swiper-slide-video-thumb-" + id
+      );
+
+      if (vids && vids.length) {
+        let vid: any = vids[0];
+        if (vid.paused) {
+          vid.hidden = false;
+          let playPromise = vid.play();
+
+          if (playPromise !== undefined) {
+            playPromise
+              .then(function() {})
+              .catch(function(error: any) {
+                console.log(error);
+                // Automatic playback failed.
+                // Show a UI element to let the user manually start playback.
+              });
+          }
+        }
+        if (thumbs) thumbs[0].hidden = true;
+      }
+    }
+
+    swiper.on("touchStart", () => {
+      stopAllVideo();
+    });
+
+    swiper.on("touchEnd", () => {
+      playCurrentVideo(swiper.activeIndex);
+    });
+
+    swiper.on("slideChangeTransitionStart", () => {
+      stopAllVideo();
+
+      let thumb: any = document.getElementsByClassName(
+        "swiper-slide-video-thumb-" + swiper.activeIndex
+      )[0];
+      if (thumb) thumb.hidden = false;
+    });
+
+    swiper.on("slideChangeTransitionEnd", () => {
+      playCurrentVideo(swiper.activeIndex);
+    });
+
+    swiper.on("resize", () => {
+      swiper.update();
+    });
+    window.addEventListener("resize", () => {
+      swiper.update();
+    });
+
+    this.swiper = swiper;
   };
+
   public render() {
     return (
       <div className="swiper-wrapper">
         {this.state.videoList.map((video, index) => {
           return (
             <VideoCell
+              autoplay={index === 0 && true}
               fontSize={18}
               hasFuncSlide={true}
+              index={index}
               key={"swiper-slide-video-" + index}
-              vid={index}
               {...video}
             />
           );

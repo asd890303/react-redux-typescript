@@ -1,5 +1,5 @@
 import FooterCell from "./FooterCell";
-import { MainMenu } from "../../types/App";
+import { MainMenu } from "../../lib/types/App";
 import React from "react";
 
 interface FooterProps {

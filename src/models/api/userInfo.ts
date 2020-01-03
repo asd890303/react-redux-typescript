@@ -1,18 +1,25 @@
 export default interface UserInfoModel {
-    user_nicename: string
-    avatar: string
+    age: string
+    area: string
     avatar_thumb: string
-    id: string
-    coin: string
-    sex: string
-    signature: string
-    province: string
-    city: string
+    avatar: string
     birthday: string
-    praise: string
+    city: string
+    code: string
+    coin: string
     fans: string
     follows: string
-    workVideos: string
+    hometown: string
+    id: string
+    isreg: string
+    last_login_time: string
     likeVideos: string
-    age: string
+    mobile: string
+    praise: string
+    province: string
+    sex: string
+    signature: string
+    token: string
+    user_nicename: string
+    workVideos: string
 }

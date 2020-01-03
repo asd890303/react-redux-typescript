@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import Request from "../../../services/request";
+import Request from "../../../lib/services/request";
 import Swiper from "swiper";
 import VideoCell from "../../base/VideoCell";
 import VideoModel from "../../../models/api/video";
@@ -16,39 +16,65 @@ export default class Hot extends React.Component<HotProps, HotState> {
       videoList: []
     };
   }
+  swiper: any = null;
+
   componentDidMount = () => {
+    this.initHotPage();
     this.getVideoList();
   };
 
+  componentWillUnmount = () => {
+    if (this.swiper) {
+      this.swiper.destroy();
+      this.swiper = null;
+    }
+  };
+
+  componentDidUpdate = () => {
+    if (this.swiper) {
+      this.swiper.update();
+      this.swiper.slideTo(1);
+    }
+  };
+
   getVideoList = () => {
-    Request.get("Video", "getRecommendVideos", {}, (response: any) => {
+    let req = new Request();
+    req.get("Video", "getRecommendVideos", {}, (response: any) => {
       console.log(response);
       if (response && response.data) {
-        this.initHotPage(response.data.info);
+        let data: VideoModel[] = response.data.info;
+        this.setState({
+          videoList: data
+        });
+
+        if (this.swiper) {
+          this.swiper.update();
+        }
       }
     });
   };
 
-  initHotPage = (data: VideoModel[]) => {
-    if (data.length > 0) {
-      this.setState({
-        videoList: data
-      });
+  initHotPage = () => {
+    let swiper = new Swiper(".swiper-container", {
+      direction: "vertical",
+      lazy: { loadOnTransitionStart: true, loadPrevNext: true },
+      observeParents: true,
+      observer: true,
+      preloadImages: false,
+      slidesPerColumn: 2,
+      slidesPerView: 2,
+      spaceBetween: 1,
+      watchSlidesVisibility: true
+    });
 
-      let swiper = new Swiper(".swiper-container", {
-        direction: "vertical",
-        slidesPerView: 2,
-        slidesPerColumn: 2,
-        spaceBetween: 1,
-        watchSlidesVisibility: true,
-        preloadImages: false,
-        lazy: { loadPrevNextAmount: 4, loadPrevNext: true }
-      });
+    swiper.on("resize", () => {
+      swiper.update();
+    });
+    window.addEventListener("resize", () => {
+      swiper.update();
+    });
 
-      // to do reload data
-      swiper.on("reachBeginning", () => {});
-      swiper.on("reachEnd", () => {});
-    }
+    this.swiper = swiper;
   };
 
   public render() {
@@ -59,10 +85,11 @@ export default class Hot extends React.Component<HotProps, HotState> {
         {this.state.videoList.map((video, index) => {
           return (
             <VideoCell
+              enableClick={true}
               hasFuncSlide={false}
               hasVideo={false}
               width={width}
-              vid={index}
+              index={index}
               key={"swiper-slide-video-" + index}
               {...video}
             />

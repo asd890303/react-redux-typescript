@@ -1,4 +1,4 @@
-import { HomeSubMenu, MainMenu } from "../../types/App";
+import { HomeSubMenu, MainMenu } from "../../lib/types/App";
 
 import React from "react";
 
@@ -15,7 +15,7 @@ export default class Header extends React.Component<HeaderProps> {
   };
 
   initHeader = () => {
-    const subMenu = ["推薦", "熱門", "附近"];
+    const subMenu = ["推荐", "热门", "附近"];
     switch (this.props.currentMenu) {
       case MainMenu.Home:
         return (
@@ -46,11 +46,11 @@ export default class Header extends React.Component<HeaderProps> {
           </header>
         );
       case MainMenu.Follow:
-        return <header className="App-header">关注</header>;
+        return <header className="App-header header">关注</header>;
       case MainMenu.Add:
         return;
       case MainMenu.Message:
-        return <header className="App-header">消息</header>;
+        return <header className="App-header header">消息</header>;
       case MainMenu.Profile:
         return;
     }

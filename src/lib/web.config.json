@@ -1,0 +1,16 @@
+{
+    "host": "http://212.64.127.100",
+    "cookie": {
+        "mapping": [
+            {
+                "name": "user",
+                "value": "wp_u"
+            },
+            {
+                "name": "token",
+                "value": "wp_tk"
+            }
+        ],
+        "expire": "7"
+    }
+}

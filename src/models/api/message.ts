@@ -24,17 +24,17 @@ interface OfficeInfoModel {
 
 export default interface MsssageModel {
     id: number
-    uid: number
-    videoid: number
-    touid: number
+    uid: string
     title: string
     synopsis: string
-    url: string
+    content: string
     addtime: string
-    isattention: string
+    isattention: number
     avatar: string
-    user_name: string
+    user_nicename: string
     video_title: string
+    video_thumb: string
+    videoid: number
     userinfo: UserInfoModel
     sysInfo: SysInfoModel
     officeInfo: OfficeInfoModel
