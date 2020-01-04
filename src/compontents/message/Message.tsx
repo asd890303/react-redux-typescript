@@ -110,7 +110,7 @@ export default class Message extends React.Component<
       if (response && response.data) {
         const data = response.data.info[0];
         this.setState({
-          appName: data.app_name
+          appName: data.app_name + "官方"
         });
       }
     });
@@ -127,7 +127,7 @@ export default class Message extends React.Component<
     new Swiper(".swiper-container", {
       direction: "vertical",
       preloadImages: false,
-      height: 60,
+      height: 100,
       allowSlidePrev: false,
       allowSlideNext: false
     });
@@ -192,7 +192,7 @@ export default class Message extends React.Component<
                 officeAvatarSrc={
                   process.env.PUBLIC_URL + "./images/msgList/msg_gov.png"
                 }
-                title={index === 0 ? this.state.appName + "官方" : "系统通知"}
+                title={index === 0 ? this.state.appName  : "系统通知"}
                 content={item.title}
                 date={index === 0 ? this.timestampToDatetime(item.addtime) : ""}
               />

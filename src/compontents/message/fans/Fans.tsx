@@ -81,7 +81,7 @@ export default class Fans extends React.Component<FansProps, FansState> {
     new Swiper(".swiper-container", {
       direction: "vertical",
       preloadImages: false,
-      height: 60
+      height: 100
     });
   };
 
@@ -96,7 +96,7 @@ export default class Fans extends React.Component<FansProps, FansState> {
     };
     return (
       <>
-        <header className="App-header">
+        <header className="App-header header">
           <ReturnButton /> 粉丝
         </header>
         {this.state.messageList.length !== 0 ? (

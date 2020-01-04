@@ -56,7 +56,7 @@ export default class Like extends React.Component<LikeProps, LikeState> {
     new Swiper(".swiper-container", {
       direction: "vertical",
       preloadImages: false,
-      height: 60
+      height: 100
     });
   };
 
@@ -71,7 +71,7 @@ export default class Like extends React.Component<LikeProps, LikeState> {
     };
     return (
       <>
-        <header className="App-header">
+        <header className="App-header header">
           <ReturnButton /> 赞
         </header>
         {this.state.messageList.length !== 0 ? (

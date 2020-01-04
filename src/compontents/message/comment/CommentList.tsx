@@ -1,19 +1,23 @@
 import { EmptyMsgContainer } from "../../../common/EmptyMsgContainer";
 import MessageModel from "../../../models/api/message";
-import NavIconDetailCell from "../nav/NavIconDetailCell";
+import CommentListCell from "../comment/CommentListCell"
 import React from "react";
 import Request from "../../../lib/services/request";
+import ReturnButton from "../../base/ReturnButton";
 import Swiper from "swiper";
 
-interface FansProps {}
+interface CommentProps {}
 
-interface FansState {
+interface CommentState {
   divHeight: number;
   messageList: MessageModel[];
 }
 
-export default class Fans extends React.Component<FansProps, FansState> {
-  constructor(props: FansProps) {
+export default class Comment extends React.Component<
+  CommentProps,
+  CommentState
+> {
+  constructor(props: CommentProps) {
     super(props);
 
     this.state = {
@@ -38,39 +42,15 @@ export default class Fans extends React.Component<FansProps, FansState> {
 
   getMessageList = () => {
     let req = new Request();
-    req.get("Message", "fansLists", {}, (response: any) => {
+    req.get("Message", "commentLists", {}, (response: any) => {
       console.log(response);
       if (response && response.data) {
-        this.initFansPage(response.data.info);
+        this.initCommentPage(response.data.info);
       }
     });
   };
 
-  handleAttention = (target: string) => {
-    this.state.messageList.forEach((item, index) => {
-      // 找到對應的他人id
-      if (item.userinfo.id === target) {
-        // setTimeout : 避免連按一直發送API
-        setTimeout(() => {
-          // 關注它人/取消關注 API
-          let req = new Request();
-          req.get("User", "setAttent", { touid: target }, (response: any) => {
-            if (response && response.data) {
-              let tempMessageList = [...this.state.messageList];
-              item.isattention = Number(response.data.info[0].isattent);
-              tempMessageList[index] = item;
-              this.setState({
-                messageList: tempMessageList
-              });
-            }
-          });
-        }, 100);
-      }
-    });
-  };
-
-  initFansPage = (data: MessageModel[]) => {
-    console.log(data);
+  initCommentPage = (data: MessageModel[]) => {
     if (data.length > 0) {
       this.setState({
         messageList: data
@@ -86,7 +66,7 @@ export default class Fans extends React.Component<FansProps, FansState> {
 
   public render() {
     const emptyMsg = {
-      title: `你还没有收获粉丝`,
+      title: `你还没有收到评论`,
       content: ``
     };
     const containerStyle = {
@@ -95,25 +75,29 @@ export default class Fans extends React.Component<FansProps, FansState> {
     };
     return (
       <>
-        <header className="App-header">粉丝</header>
+        <header className="App-header">
+          <ReturnButton />
+          评论
+        </header>
         {this.state.messageList.length !== 0 ? (
           <div className="swiper-container" style={containerStyle}>
             <div className="swiper-wrapper">
               {this.state.messageList.map((item, index) => {
                 return (
-                  <NavIconDetailCell
+                  <CommentListCell
                     key={"swiper-slide-msg" + index}
                     index={index}
-                    otherUid={item.userinfo.id}
                     toLink={"/"}
-                    avatarSrc={item.userinfo.avatar}
-                    otherUser={item.userinfo.user_nicename}
-                    content="关注了你"
+                    avatarSrc={item.avatar}
+                    otherUser={item.user_nicename}
+                    content="评论了你的作品"
+                    comment_content={item.content}
+                    video_thumb={item.video_thumb}
+                    videoid={item.videoid}
                     addtime={item.addtime}
-                    isAttention={item.isattention}
-                    hasButton={true}
-                    fromPage="fans"
-                    onClick={this.handleAttention}
+                    hasVideoThumb={true}
+                    fromPage="comment"
+                    onClick={() => {}}
                   />
                 );
               })}

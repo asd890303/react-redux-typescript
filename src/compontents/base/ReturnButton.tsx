@@ -1,6 +1,7 @@
 import * as React from "react";
 
 interface ReturnButtonProps {
+  isClose?: boolean;
   history?: any;
   onClick?: Function;
 }
@@ -19,7 +20,10 @@ export default class ReturnButton extends React.Component<ReturnButtonProps> {
   };
   public render() {
     return (
-      <div className="return-button" onClick={this.handleClick}>
+      <div
+        className={this.props.isClose ? "close-button" : "return-button"}
+        onClick={this.handleClick}
+      >
         <img
           src={process.env.PUBLIC_URL + "/images/common/pub_back@2x.png"}
           alt="reutrn-button"

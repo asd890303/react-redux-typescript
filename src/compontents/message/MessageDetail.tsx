@@ -89,7 +89,7 @@ export default class MessageDetail extends React.Component<
     new Swiper(".swiper-container", {
       direction: "vertical",
       preloadImages: false,
-      height: 60,
+      height: 100,
       spaceBetween: 1
     });
   };
@@ -107,7 +107,7 @@ export default class MessageDetail extends React.Component<
 
     return (
       <>
-        <header className="App-header">
+        <header className="App-header header">
           <ReturnButton />
           {this.props.match.params.name === "official"
             ? this.state.appName

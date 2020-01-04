@@ -99,7 +99,7 @@ export default class NavIconCell extends React.Component<
     };
     return (
       <>
-        <header className="App-header">
+        <header className="App-header header">
           <ReturnButton /> {this.state.title}
         </header>
         <Container style={containerStyle}>

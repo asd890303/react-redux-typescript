@@ -4,16 +4,16 @@ import "../../styles/swiper/swiper.min.css";
 import * as React from "react";
 
 import { AdTextModel } from "../../models/api/adText";
+import { AppState } from "../../lib/store";
 import { HomeSubMenu } from "../../lib/types/App";
 import Hot from "./hot/Hot";
 import Marquee from "../base/Marquee";
 import Nearby from "./nearby/Nearby";
 import Recommend from "./recommend/Recommend";
 import Request from "../../lib/services/request";
+import { RouteComponentProps } from "react-router-dom";
 
-interface HomeProps {
-  currentHomeSubMenu: HomeSubMenu;
-}
+interface HomeProps extends AppState, RouteComponentProps {}
 interface HomeState {
   adText: string;
   divHeight: number;
@@ -50,13 +50,13 @@ export default class Home extends React.Component<HomeProps, HomeState> {
   };
 
   getHomePage = () => {
-    switch (this.props.currentHomeSubMenu) {
+    switch (this.props.app.currentHomeSubMenu) {
       case HomeSubMenu.Recommend:
-        return <Recommend />;
+        return <Recommend isLogin={this.props.app.isLogin} {...this.props} />;
       case HomeSubMenu.Hot:
-        return <Hot />;
+        return <Hot isLogin={this.props.app.isLogin} {...this.props} />;
       case HomeSubMenu.Nearby:
-        return <Nearby />;
+        return <Nearby isLogin={this.props.app.isLogin} {...this.props} />;
     }
   };
 
@@ -73,7 +73,7 @@ export default class Home extends React.Component<HomeProps, HomeState> {
         className="swiper-container"
         style={{ height: this.state.divHeight }}
       >
-        {this.props.currentHomeSubMenu === HomeSubMenu.Recommend && (
+        {this.props.app.currentHomeSubMenu === HomeSubMenu.Recommend && (
           <Marquee text={this.state.adText} />
         )}
         {this.getHomePage()}

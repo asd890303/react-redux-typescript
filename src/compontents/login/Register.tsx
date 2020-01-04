@@ -1,3 +1,5 @@
+import { Modal } from "react-bootstrap";
+import PageLoading from "../base/PageLoading";
 import React from "react";
 import Request from "../../lib/services/request";
 import ReturnButton from "../base/ReturnButton";
@@ -12,10 +14,13 @@ interface RegisterProps extends RouteComponentProps {
 }
 
 interface RegisterState {
+  errorMsg: string;
   captcha: string;
   confirmpwd: string;
+  isLoading: boolean;
   password: string;
   submitted: boolean;
+  showModal: boolean;
   userName: string;
 }
 export default class Register extends React.Component<
@@ -29,7 +34,10 @@ export default class Register extends React.Component<
     this.state = {
       captcha: "",
       confirmpwd: "",
+      errorMsg: "",
+      isLoading: false,
       password: "",
+      showModal: false,
       submitted: false,
       userName: ""
     };
@@ -79,6 +87,10 @@ export default class Register extends React.Component<
 
   // ???
   postRegUser = () => {
+    this.setState({
+      isLoading: true
+    });
+
     let body = {
       user_login: this.state.userName,
       user_pass: this.state.password,
@@ -88,17 +100,25 @@ export default class Register extends React.Component<
 
     let req = new Request();
     req.get("Login", "userReg", body, (response: any) => {
+      this.setState({
+        isLoading: false
+      });
       this.getCaptcha();
       if (response && response.data) {
         let msg = response.data.msg;
         let code = response.data.code;
+        this.setModal(msg);
         if (msg === "注册成功" || code === "0") {
-          alert(msg);
           this.handleClose();
-        } else {
-          alert(msg);
         }
       }
+    });
+  };
+
+  setModal = (msg: string) => {
+    this.setState({
+      showModal: !this.state.showModal,
+      errorMsg: msg
     });
   };
 
@@ -200,6 +220,16 @@ export default class Register extends React.Component<
             </div>
           </form>
         </div>
+        <Modal
+          show={this.state.showModal}
+          centered
+          onHide={() => this.setModal("")}
+        >
+          <Modal.Body>
+            <p style={{ textAlign: "center" }}>{this.state.errorMsg}</p>
+          </Modal.Body>
+        </Modal>
+        <PageLoading isShow={this.state.isLoading} />
       </div>
     );
   }

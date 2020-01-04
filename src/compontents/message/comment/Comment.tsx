@@ -60,7 +60,7 @@ export default class Comment extends React.Component<
     new Swiper(".swiper-container", {
       direction: "vertical",
       preloadImages: false,
-      height: 60
+      height: 100
     });
   };
 
@@ -75,7 +75,7 @@ export default class Comment extends React.Component<
     };
     return (
       <>
-        <header className="App-header">
+        <header className="App-header header">
           <ReturnButton />
           评论
         </header>

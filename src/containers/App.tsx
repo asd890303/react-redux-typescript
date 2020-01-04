@@ -35,7 +35,6 @@ interface AppProps extends AppState, RouteComponentProps {
 
 class App extends React.Component<AppProps> {
   CookieManager: CookieManager = new CookieManager();
-  componentDidMount() {}
 
   constructor(props: AppProps) {
     super(props);
@@ -68,10 +67,10 @@ class App extends React.Component<AppProps> {
   };
 
   getContent() {
-    const { currentMenu, currentHomeSubMenu } = this.props.app;
+    const { currentMenu } = this.props.app;
     switch (currentMenu) {
       case MainMenu.Home:
-        return <Home currentHomeSubMenu={currentHomeSubMenu} />;
+        return <Home {...this.props} />;
       case MainMenu.Follow:
         return <Follow />;
       case MainMenu.Message:
@@ -79,7 +78,7 @@ class App extends React.Component<AppProps> {
       case MainMenu.Profile:
         return <Profile />;
       case MainMenu.Add:
-        return <Home currentHomeSubMenu={currentHomeSubMenu} />;
+        return <Home {...this.props} />;
     }
   }
 
@@ -99,10 +98,10 @@ class App extends React.Component<AppProps> {
         </Route>
         {/* video */}
         <PrivateRoute
-          isLogin={this.props.app.isLogin}
-          path={`/video/:vid`}
+          path="/video/:vid"
           component={Video}
-        />
+          {...this.props}
+        ></PrivateRoute>
         {/* login */}
         <Route
           exact

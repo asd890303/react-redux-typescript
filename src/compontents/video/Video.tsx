@@ -1,15 +1,16 @@
 import * as React from "react";
 
+import { AppState } from "../../lib/store";
 import Request from "../../lib/services/request";
 import ReturnButton from "../base/ReturnButton";
 import { RouteComponentProps } from "react-router-dom";
-import VideoCell from "../base/VideoCell";
+import VideoCell from "./VideoCell";
 import VideoModel from "../../models/api/video";
 
 interface MatchParams {
   vid: string;
 }
-interface VideoProps extends RouteComponentProps<MatchParams> {}
+interface VideoProps extends AppState, RouteComponentProps {}
 interface VideoState {
   msg: string;
   video: VideoModel | null;
@@ -17,7 +18,7 @@ interface VideoState {
 export default class Video extends React.Component<VideoProps, VideoState> {
   constructor(props: VideoProps) {
     super(props);
-    console.log(props);
+
     this.state = {
       msg: "",
       video: null
@@ -25,23 +26,23 @@ export default class Video extends React.Component<VideoProps, VideoState> {
   }
 
   componentDidMount = () => {
+    this.updateVideoFunc();
+  };
+
+  updateVideoFunc = () => {
     let req = new Request();
-    req.get(
-      "Video",
-      "getVideo",
-      { videoid: this.props.match.params.vid },
-      (response: any) => {
-        if (response && response.data && response.data.info.length > 0) {
-          this.setState({
-            video: response.data.info[0]
-          });
-        } else {
-          this.setState({
-            msg: response.data.msg
-          });
-        }
+    let params: any = this.props.match.params;
+    req.get("Video", "getVideo", { videoid: params.vid }, (response: any) => {
+      if (response && response.data && response.data.info.length > 0) {
+        this.setState({
+          video: response.data.info[0]
+        });
+      } else {
+        this.setState({
+          msg: response.data.msg
+        });
       }
-    );
+    });
   };
 
   public render() {
@@ -51,10 +52,12 @@ export default class Video extends React.Component<VideoProps, VideoState> {
           <ReturnButton />
           <VideoCell
             autoplay={true}
-            hiddenThumb={true}
             fontSize={18}
             hasFuncSlide={true}
+            hiddenThumb={true}
             index={0}
+            updateVideoFunc={this.updateVideoFunc}
+            isLogin={this.props.app.isLogin}
             {...this.state.video}
           />
         </>

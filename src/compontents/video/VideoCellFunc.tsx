@@ -27,17 +27,22 @@ export default class VideoCellFunc extends React.Component<VideoCellFuncProps> {
               className="swiper-slide-func-content"
               key={"slide-func-" + index}
               onClick={() => {
-                item.onClick();
+                item.onClick(this.props.vid);
               }}
             >
               {index === 0 ? (
                 <div className="func-content-user">
                   <img src={item.avatarSrc} alt={item.name}></img>
-                  <img src={item.imgSrc} alt={item.name}></img>
+                  {!item.selected && (
+                    <img src={item.imgSrc} alt={item.name}></img>
+                  )}
                 </div>
               ) : (
                 <>
-                  <img src={item.imgSrc} alt={item.name}></img>
+                  <img
+                    src={item.selected ? item.imgSrcSelected : item.imgSrc}
+                    alt={item.name}
+                  ></img>
                   <span>{item.num >= 0 ? item.num : ""}</span>
                 </>
               )}

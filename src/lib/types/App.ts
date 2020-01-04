@@ -12,8 +12,8 @@ export enum HomeSubMenu {
 export interface AppState {
     currentHomeSubMenu: HomeSubMenu;
     currentMenu: MainMenu;
-    isLogin: Boolean;
-    searchKeyword: string;
+    isLogin: boolean;
+    searchKeyword?: string;
     userInfo?: UserInfoModel | null;
 }
 

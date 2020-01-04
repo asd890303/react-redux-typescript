@@ -1,11 +1,14 @@
 import * as React from "react";
 
 import Request from "../../../lib/services/request";
+import { RouteComponentProps } from "react-router-dom";
 import Swiper from "swiper";
-import VideoCell from "../../base/VideoCell";
+import VideoCell from "../../video/VideoCell";
 import VideoModel from "../../../models/api/video";
 
-interface NearbyProps {}
+interface NearbyProps extends RouteComponentProps {
+  isLogin: boolean;
+}
 interface NearbyState {
   videoList: VideoModel[];
 }
@@ -102,6 +105,7 @@ export default class Nearby extends React.Component<NearbyProps, NearbyState> {
               hasVideo={false}
               width={width}
               index={index}
+              isLogin={this.props.isLogin}
               key={"swiper-slide-video-" + index}
               {...video}
             />

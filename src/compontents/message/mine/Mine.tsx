@@ -57,7 +57,7 @@ export default class Mine extends React.Component<MineProps, MineState> {
     new Swiper(".swiper-container", {
       direction: "vertical",
       preloadImages: false,
-      height: 60
+      height: 100
     });
   };
 
@@ -72,7 +72,7 @@ export default class Mine extends React.Component<MineProps, MineState> {
     };
     return (
       <>
-        <header className="App-header">
+        <header className="App-header header">
           <ReturnButton /> @我的
         </header>
         {this.state.messageList.length !== 0 ? (

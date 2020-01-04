@@ -1,6 +1,6 @@
+import { AppActionType, AppState, HomeSubMenu, MainMenu, TOGGLE_HOME_SUB_PAGE, TOGGLE_MENU, USER_LOGIN } from '../types/App';
 
 import CookieManager from '../cookie/cookie';
-import { AppState, HomeSubMenu, MainMenu, USER_LOGIN, TOGGLE_MENU, TOGGLE_HOME_SUB_PAGE, AppActionType } from '../types/App';
 
 const isLogin = () => {
     const cm = new CookieManager();
@@ -8,6 +8,7 @@ const isLogin = () => {
         let obj = {
             ...JSON.parse(cm.getCookie("user"))
         };
+
         return !!(obj.id && obj.token);
     }
     return false;

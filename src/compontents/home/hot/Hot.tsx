@@ -1,11 +1,14 @@
 import * as React from "react";
 
 import Request from "../../../lib/services/request";
+import { RouteComponentProps } from "react-router-dom";
 import Swiper from "swiper";
-import VideoCell from "../../base/VideoCell";
+import VideoCell from "../../video/VideoCell";
 import VideoModel from "../../../models/api/video";
 
-interface HotProps {}
+interface HotProps extends RouteComponentProps {
+  isLogin: boolean;
+}
 interface HotState {
   videoList: VideoModel[];
 }
@@ -90,6 +93,7 @@ export default class Hot extends React.Component<HotProps, HotState> {
               hasVideo={false}
               width={width}
               index={index}
+              isLogin={this.props.isLogin}
               key={"swiper-slide-video-" + index}
               {...video}
             />

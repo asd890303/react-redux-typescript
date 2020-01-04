@@ -28,6 +28,7 @@ const MsgCell = styled.div`
   width: 100%;
   justify-content: center;
   align-items: center;
+  padding: 20px 0;
 `;
 
 const Avatar = styled.div`
@@ -70,11 +71,12 @@ const Other = styled.div`
 const AttensionButton = styled.button`
   background-color: transparent;
   border-color: deeppink;
-  width: 80px;
-  height: 40px;
-  border-radius: 40px;
+  width: 60px;
+  height: 30px;
+  border-radius: 30px;
   color: deeppink;
   cursor: pointer;
+  outline: none;
 
   &.isAttention {
     border-color: #969696;
@@ -133,7 +135,6 @@ export default class NavIconCell extends React.Component<
             <AttensionButton
               className={isAttention ? "isAttention" : ""}
               onClick={this.handleAttention}
-              style={{ outline: "none" }}
             >
               {isAttention ? "已关注" : "关注"}
             </AttensionButton>

@@ -22,7 +22,6 @@ const MsgCell = styled.div`
   width: 100%;
   justify-content: center;
   align-items: center;
-  padding: 20px 0;
 `;
 
 const Avatar = styled.div`

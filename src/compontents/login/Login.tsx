@@ -1,4 +1,9 @@
+import "bootstrap/dist/css/bootstrap.min.css";
+
 import { AppAction } from "../../lib/actions";
+import { AppState } from "../../lib/store";
+import { Modal } from "react-bootstrap";
+import PageLoading from "../base/PageLoading";
 import React from "react";
 import Register from "./Register";
 import Request from "../../lib/services/request";
@@ -6,7 +11,7 @@ import ReturnButton from "../base/ReturnButton";
 import { RouteComponentProps } from "react-router";
 import UserInfoModel from "../../models/api/userInfo";
 
-interface LoginProps extends RouteComponentProps {
+interface LoginProps extends RouteComponentProps, AppState {
   callbackUrl?: string;
   className?: string;
   isDialog?: boolean;
@@ -16,7 +21,10 @@ interface LoginProps extends RouteComponentProps {
 }
 
 interface LoginState {
+  apiMsg: string;
+  isLoading: boolean;
   password: string;
+  showModal: boolean;
   showRegister: boolean;
   userName: string;
 }
@@ -24,21 +32,32 @@ export default class Login extends React.Component<LoginProps, LoginState> {
   constructor(props: LoginProps) {
     super(props);
     this.state = {
+      apiMsg: "",
+      isLoading: false,
       password: "",
+      showModal: false,
       showRegister: false,
       userName: ""
     };
 
-    console.log(this.props);
+    if (this.props.app.isLogin) {
+      this.props.history.push("/");
+    }
   }
 
   postLogin = () => {
+    this.setState({
+      isLoading: true
+    });
     let body = {
       user_login: this.state.userName,
       user_pass: this.state.password
     };
     let req = new Request();
     req.get("Login", "userLogin", body, (response: any) => {
+      this.setState({
+        isLoading: false
+      });
       if (response && response.data) {
         let token =
           response.data.info &&
@@ -50,9 +69,16 @@ export default class Login extends React.Component<LoginProps, LoginState> {
           this.props.userLogin(userInfo);
           this.handleClose();
         } else {
-          alert(response.data.msg);
+          this.setModal(response.data.msg);
         }
       }
+    });
+  };
+
+  setModal = (msg: string) => {
+    this.setState({
+      showModal: !this.state.showModal,
+      apiMsg: msg
     });
   };
 
@@ -65,6 +91,12 @@ export default class Login extends React.Component<LoginProps, LoginState> {
   handleClose = () => {
     if (this.props.isDialog && this.props.onClose) {
       this.props.onClose();
+    } else if (this.props.location.state && this.props.location.state.next) {
+      this.props.history.push(this.props.location.state.next);
+    } else if (this.props.location.search) {
+      let params = new URLSearchParams(this.props.location.search);
+      let q: string = params.get("ref") || ".";
+      this.props.history.push(q.split(".")[0] + "/" + q.split(".")[1]);
     } else {
       this.props.history.push("/");
     }
@@ -79,9 +111,8 @@ export default class Login extends React.Component<LoginProps, LoginState> {
     }));
   };
 
-  handleOtherLogin = () => {
-    console.log("other login");
-  };
+  //暫時不支持
+  handleOtherLogin = () => {};
 
   handleSubmit = (e: any) => {
     let form: any = document.getElementById("login-form");
@@ -98,6 +129,7 @@ export default class Login extends React.Component<LoginProps, LoginState> {
   };
 
   public render() {
+    console.log(this.props);
     return (
       <>
         <div
@@ -141,11 +173,13 @@ export default class Login extends React.Component<LoginProps, LoginState> {
                 >
                   立即登录
                 </button>
-                <p onClick={this.toggleRegister}>没有帐号？我要注册</p>
-
-                <p onClick={this.handleOtherLogin} style={{ padding: "15%" }}>
-                  其他登錄方式
+                <br />
+                <p onClick={this.toggleRegister} style={{ marginTop: 25 }}>
+                  没有帐号？我要注册
                 </p>
+                {/* <p onClick={this.handleOtherLogin} style={{ padding: "15%" }}>
+                  其他登錄方式
+                </p> */}
               </div>
             </div>
           </form>
@@ -160,6 +194,16 @@ export default class Login extends React.Component<LoginProps, LoginState> {
           isDialog={true}
           onClose={this.handleCloseregister}
         />
+        <Modal
+          show={this.state.showModal}
+          centered
+          onHide={() => this.setModal("")}
+        >
+          <Modal.Body>
+            <p style={{ textAlign: "center" }}>{this.state.apiMsg}</p>
+          </Modal.Body>
+        </Modal>
+        <PageLoading isShow={this.state.isLoading} />
       </>
     );
   }

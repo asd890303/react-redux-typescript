@@ -1,14 +1,18 @@
 import * as React from "react";
 
 import Request from "../../../lib/services/request";
+import { RouteComponentProps } from "react-router-dom";
 import Swiper from "swiper";
-import VideoCell from "../../base/VideoCell";
+import VideoCell from "../../video/VideoCell";
 import VideoModel from "../../../models/api/video";
 
-interface RecommendProps {}
+interface RecommendProps extends RouteComponentProps {
+  isLogin: boolean;
+}
 interface RecommendState {
   videoList: VideoModel[];
 }
+
 export default class Recommend extends React.Component<
   RecommendProps,
   RecommendState
@@ -105,7 +109,7 @@ export default class Recommend extends React.Component<
             playPromise
               .then(function() {})
               .catch(function(error: any) {
-                console.log(error);
+                // console.log(error);
                 // Automatic playback failed.
                 // Show a UI element to let the user manually start playback.
               });
@@ -139,6 +143,7 @@ export default class Recommend extends React.Component<
     swiper.on("resize", () => {
       swiper.update();
     });
+
     window.addEventListener("resize", () => {
       swiper.update();
     });
@@ -148,20 +153,23 @@ export default class Recommend extends React.Component<
 
   public render() {
     return (
-      <div className="swiper-wrapper">
-        {this.state.videoList.map((video, index) => {
-          return (
-            <VideoCell
-              autoplay={index === 0 && true}
-              fontSize={18}
-              hasFuncSlide={true}
-              index={index}
-              key={"swiper-slide-video-" + index}
-              {...video}
-            />
-          );
-        })}
-      </div>
+      <>
+        <div className="swiper-wrapper">
+          {this.state.videoList.map((video, index) => {
+            return (
+              <VideoCell
+                autoplay={index === 0 && true}
+                fontSize={18}
+                hasFuncSlide={true}
+                index={index}
+                isLogin={this.props.isLogin}
+                key={"swiper-slide-video-" + index}
+                {...video}
+              />
+            );
+          })}
+        </div>
+      </>
     );
   }
 }

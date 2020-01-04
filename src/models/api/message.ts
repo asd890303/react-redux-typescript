@@ -22,7 +22,7 @@ interface OfficeInfoModel {
     ip: string
 }
 
-export default interface MsssageModel {
+export default interface MessageModel {
     id: number
     uid: string
     title: string
